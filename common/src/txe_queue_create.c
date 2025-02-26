@@ -93,6 +93,8 @@ TX_THREAD       *thread_ptr;
 #endif
 
 
+    TRACE_RECORD_U32x4(TRACE_API_TXE_QUEUE_CREATE, TX_POINTER_TO_ULONG_CONVERT(queue_ptr), TX_POINTER_TO_ULONG_CONVERT(queue_ptr), message_size, queue_size);
+
     /* Default status to success.  */
     status =  TX_SUCCESS;
 
@@ -232,6 +234,8 @@ TX_THREAD       *thread_ptr;
         /* Call actual queue create function.  */
         status =  _tx_queue_create(queue_ptr, name_ptr, message_size, queue_start, queue_size);
     }
+
+    TRACE_RECORD_END_CALL_U32(TRACE_API_TXE_QUEUE_CREATE, status);
 
     /* Return completion status.  */
     return(status);
