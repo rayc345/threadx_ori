@@ -32,6 +32,10 @@
     IMPORT  _tx_execution_thread_enter
     IMPORT  _tx_execution_thread_exit
 #endif
+#if (defined(ENABLE_TRACE_API))
+    IMPORT  trace_task_exec
+    IMPORT  trace_task_stop
+#endif
 
     AREA ||.text||, CODE, READONLY
     PRESERVE8
@@ -130,6 +134,15 @@ PendSV_Handler
 
 __tx_ts_handler
 
+#if (defined(ENABLE_TRACE_API))
+    /* Call trace_task_stop to record the task switch. */
+    CPSID   i                                       // Disable interrupts
+    PUSH    {r0, lr}                                // Save LR (and r0 just for alignment)
+    BL      trace_task_stop
+    POP     {r0, lr}                                // Recover LR
+    CPSIE   i                                       // Enable interrupts
+#endif
+
 #if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))
     /* Call the thread exit function to indicate the thread is no longer executing.  */
 #ifdef TX_PORT_USE_BASEPRI
@@ -223,6 +236,13 @@ __tx_ts_restore
     /* Setup global time-slice with thread's current time-slice.  */
 
     STR     r5, [r4]                                // Setup global time-slice
+
+#if (defined(ENABLE_TRACE_API))
+    /* Call trace_task_exec to record the task switch. */
+    PUSH    {r0, r1}                                // Save r0 and r1
+    BL      trace_task_exec
+    POP     {r0, r1}
+#endif
 
 #if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))
     /* Call the thread entry function to indicate the thread is executing.  */
