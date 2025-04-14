@@ -33,6 +33,26 @@ You should observe the compilation of sample_threadx.c (which is the demonstrati
 application) and linking with tx.a. The resulting file DEMO is a binary file 
 that can be executed.
 
+2.1 Includes
+
+Notice that the demonstration Makefile includes defines for _GNU_SOURCE
+and TX_LINUX_MULTI_CORE. These are necessary to enable GNU/Linux-specific
+compatibility for ThreadX using SMP with the Linux kernel in multi-core devices,
+including the option to control processor affinity. See the GNU documentation
+on CPU affinity and Feature Test Macros for more information.
+
+TX_LINUX_MULTI_CORE is necessary to enable code that constrains ThreadX to
+one core, to prevent unintended behavior when threads execute simultaneously
+across multiple cores. The enabled code configures CPU affinity, requiring
+the use of macros such as CPU_SET and functions such as sched_setaffinity.
+Access to these macros and functions (and the underlying types for the latter)
+are enabled via the definition of _GNU_SOURCE.
+
+When building your own application, the _GNU_SOURCE and TX_LINUX_MULTI_CORE
+symbols can be defined by being passed to the compiler (e.g. -D_GNU_SOURCE) or
+in the optional user-defined ThreadX user define file tx_user.h. In the latter
+case, ensure that the symbol TX_INCLUDE_USER_DEFINE_FILE is defined, to instruct
+the tx_port.h header to include tx_user.h.
 
 3.  System Initialization
 
