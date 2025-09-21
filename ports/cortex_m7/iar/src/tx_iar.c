@@ -439,7 +439,7 @@ void    __iar_Initlocks(void);
 
 #ifdef TX_ENABLE_IAR_LIBRARY_SUPPORT
 
-#include <DLib_threads.h>
+#include <DLib_Threads.h>
 
 
 void * __aeabi_read_tp();
