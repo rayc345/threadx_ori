@@ -329,6 +329,7 @@ TEST_ENTRY  test_control_tests[] =
     threadx_queue_basic_four_word_application_define,
     threadx_queue_basic_eight_word_application_define,
     threadx_queue_basic_sixteen_word_application_define,
+    threadx_queue_basic_max_message_size_application_define,
     threadx_queue_empty_suspension_application_define,
     threadx_queue_full_suspension_application_define,
     threadx_queue_suspension_timeout_application_define,
