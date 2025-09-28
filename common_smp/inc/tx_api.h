@@ -149,7 +149,10 @@ extern   "C" {
 #define AZURE_RTOS_THREADX
 #define THREADX_MAJOR_VERSION           6
 #define THREADX_MINOR_VERSION           4
-#define THREADX_PATCH_VERSION           2
+#define THREADX_PATCH_VERSION           3
+#define THREADX_BUILD_VERSION           202503
+#define THREADX_HOTFIX_VERSION          ''
+
 
 /* Define the following symbol for backward compatibility */
 #define EL_PRODUCT_THREADX
