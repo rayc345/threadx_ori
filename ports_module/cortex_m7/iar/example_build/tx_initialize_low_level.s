@@ -26,6 +26,10 @@
     EXTERN  __vector_table
     EXTERN  _tx_execution_isr_enter
     EXTERN  _tx_execution_isr_exit
+#if (defined(ENABLE_TRACE_API))
+    EXTERN  trace_isr_enter
+    EXTERM  trace_isr_exit
+#endif
 
 SYSTEM_CLOCK      EQU   25000000
 SYSTICK_CYCLES    EQU   ((SYSTEM_CLOCK / 100) -1)
@@ -153,7 +157,13 @@ SysTick_Handler:
 #ifdef TX_ENABLE_EXECUTION_CHANGE_NOTIFY
     BL      _tx_execution_isr_enter             // Call the ISR enter function
 #endif
+#if (defined(ENABLE_TRACE_API))
+    BL		trace_isr_enter
+#endif
     BL      _tx_timer_interrupt
+#if (defined(ENABLE_TRACE_API))
+    BL		trace_isr_exit
+#endif
 #ifdef TX_ENABLE_EXECUTION_CHANGE_NOTIFY
     BL      _tx_execution_isr_exit              // Call the ISR exit function
 #endif

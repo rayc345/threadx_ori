@@ -19,6 +19,10 @@
 /**************************************************************************/
 /**************************************************************************/
 
+#if (defined(ENABLE_TRACE_API))
+    .global  trace_isr_enter
+    .global  trace_isr_exit
+#endif
 
 SYSTEM_CLOCK        =     25000000
 SYSTICK_CYCLES      =     ((SYSTEM_CLOCK / 100) -1)
@@ -156,8 +160,14 @@ __tx_IntHandler:
 #if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))
     BL      _tx_execution_isr_enter             // Call the ISR enter function
 #endif
+#if (defined(ENABLE_TRACE_API))
+    BL      trace_isr_enter
+#endif
     /* Do interrupt handler work here */
     /* .... */
+#if (defined(ENABLE_TRACE_API))
+    BL      trace_isr_exit
+#endif
 #if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))
     BL      _tx_execution_isr_exit              // Call the ISR exit function
 #endif

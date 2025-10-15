@@ -29,6 +29,10 @@
     IMPORT  |Image$$ZI$$Base|
     IMPORT  |Image$$ZI$$Limit|
     IMPORT  __tx_PendSVHandler
+#if (defined(ENABLE_TRACE_API))
+    IMPORT  trace_isr_enter
+    IMPORT  trace_isr_exit
+#endif
 ;
 ;
 SYSTEM_CLOCK        EQU     6000000
@@ -238,8 +242,14 @@ __tx_IntHandler
 #if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))
     BL      _tx_execution_isr_enter             // Call the ISR enter function
 #endif
+#if (defined(ENABLE_TRACE_API))
+    BL		trace_isr_enter
+#endif
 ;    /* Do interrupt handler work here */
 ;    /* .... */
+#if (defined(ENABLE_TRACE_API))
+    BL		trace_isr_exit
+#endif
 #if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))
     BL      _tx_execution_isr_exit              // Call the ISR exit function
 #endif
@@ -259,7 +269,13 @@ SysTick_Handler
 #if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))
     BL      _tx_execution_isr_enter             // Call the ISR enter function
 #endif
+#if (defined(ENABLE_TRACE_API))
+    BL		trace_isr_enter
+#endif
     BL      _tx_timer_interrupt
+#if (defined(ENABLE_TRACE_API))
+    BL		trace_isr_exit
+#endif
 #if (defined(TX_ENABLE_EXECUTION_CHANGE_NOTIFY) || defined(TX_EXECUTION_PROFILE_ENABLE))
     BL      _tx_execution_isr_exit              // Call the ISR exit function
 #endif
